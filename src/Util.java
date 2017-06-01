@@ -1,6 +1,22 @@
 import java.io.*;
 
+/**
+ * Whois Util
+ *
+ * @author Ryan
+ * @create 2017-05-30 12:44
+ **/
+
 public class Util {
+    /*
+     * Reads file to String
+     *
+     * @param fileName the file need to read
+     * @return String
+     *
+     * @author Ryan
+     * @date 2017/6/1 10:22
+     */
     public static String readFile(String fileName){
         String str = "";
         try {
@@ -19,6 +35,16 @@ public class Util {
         }
         return str;
     }
+    /*
+     * Write string to file
+     *
+     * @param fileName file name
+     * @param data the string will be written to the file
+     * @return void
+     *
+     * @author Ryan
+     * @date 2017/6/1 10:22
+     */
     public static void writeFile(String fileName,String data){
         try {
             FileWriter fileWriter = new FileWriter(fileName);
@@ -28,5 +54,8 @@ public class Util {
         } catch (IOException ie) {
             ie.printStackTrace();
         }
+    }
+    public static String htmlSpecialChar(String html) {
+        return html.replaceAll("&gt;?","<").replaceAll("&nbsp;?"," ");
     }
 }

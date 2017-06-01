@@ -5,8 +5,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Whois Server
+ *
+ * @author Ryan
+ * @create 2017-05-30 12:44
+ **/
+
 public class Server {
-    ServerSocket ss;
+    private ServerSocket ss;
     Server() {
         try {
             ss = new ServerSocket(43);
@@ -29,9 +36,17 @@ public class Server {
         }
     }
 }
+
+/**
+ * Socket Thread
+ *
+ * @author Ryan
+ * @create 2017-05-31 10:44
+ **/
+
 class SocketThread extends Thread {
     private Socket sock = null;
-    public SocketThread (Socket s) {
+    SocketThread (Socket s) {
         sock = s;
     }
     @Override
@@ -41,7 +56,6 @@ class SocketThread extends Thread {
             PrintWriter pw = new PrintWriter(sock.getOutputStream());
             String line = br.readLine();
             if (line !=null) {
-                System.out.println("Querying " + line);
                 pw.write(JWhois.whois(line));
                 pw.flush();
                 pw.close();
