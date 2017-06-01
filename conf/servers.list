@@ -22,7 +22,6 @@
          "data":"<table class=data>(.*)<\/table>",
          "group":"1",
          "format": {
-            "</td> <td>":" ",
             "<td>|<tr>|</td>": "",
             "</tr>": "\r\n"
          }
