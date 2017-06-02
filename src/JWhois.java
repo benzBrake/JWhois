@@ -16,7 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
  **/
 
 public class JWhois {
-    public static JSONObject Servers = JSONObject.fromObject(Util.readFile("conf/servers.list"));
+    private static JSONObject Servers = JSONObject.fromObject(Util.readFile("conf/servers.list"));
     public static void main(String[] args) throws Exception {
         System.out.println(JWhois.whois(args[0]));
     }
@@ -27,15 +27,17 @@ public class JWhois {
         url = url.replaceAll("https?://","").replaceAll("/.*","");
         String tld = getTLD(url);
         if (!Servers.containsKey(tld)) {
-            System.out.println("No Found in servers.list");
+            System.out.println("Not Found in servers.list");
             String server = getWhoisServerFromIANA(tld);
             if (server == null || server.equals("DO NOT SUPPORT THIS DOMAIN!"))
                 return "DO NOT SUPPORT THIS DOMAIN!";
             JSONObject newServer = new JSONObject();
             newServer.put("server",server);
             newServer.put("parameter","{domain}");
-            Servers.put(tld,newServer);
-            Util.writeFile("conf/servers.list",Servers.toString());
+            if (tld !=null) {
+                Servers.put(tld,newServer);
+                Util.writeFile("conf/servers.list",Servers.toString());
+            }
         }
         Object WConfig = Servers.get(tld);
         JSONObject JConfig = JSONObject.fromObject(WConfig);
@@ -54,7 +56,7 @@ public class JWhois {
      * @author Ryan
      * @date 2017/6/1 10:18
      */
-    public static String webWhois(String domain) {
+    private static String webWhois(String domain) {
         String tld = getTLD(domain);
         if (Servers != null) {
             if (Servers.containsKey(tld)) {
@@ -64,7 +66,7 @@ public class JWhois {
                 Boolean getFlag = false;
                 if (reqUrl.contains("{domain}")) {
                     getFlag = true;
-                    reqUrl.replaceAll("\\{domain\\}", domain);
+                    reqUrl = reqUrl.replaceAll("\\{domain\\}", domain);
                 }
                 try {
                     URL url = new URL(reqUrl);
@@ -148,7 +150,7 @@ public class JWhois {
                 line = br.readLine();
             }
             if (line !=null) {
-                return line.replaceAll("^[^\\s]*\\s+","");
+                return line.replaceAll("^[^\\s]*\\s+","").trim();
             }
             return line;
         } catch (Exception e) {
@@ -167,11 +169,11 @@ public class JWhois {
      * @author Ryan
      * @date 2017/5/31 10:20
      */
-    private static String OnceTCP(String host,Integer port,String parameter) {
+    private static String OnceTCP(String host,int port,String parameter) {
         String Result = "";
         try {
             Socket socket = new Socket(host, port);
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));;
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter write = new PrintWriter(socket.getOutputStream());
             write.write(parameter + "\r\n");
             write.flush();
