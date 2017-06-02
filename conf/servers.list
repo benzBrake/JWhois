@@ -19,10 +19,10 @@
       "server":"https://www.nic.tt/cgi-bin/search.pl",
       "parameter":"name={domain}",
       "regex":{
-         "data":"<table class=data>(.*)<\/table>",
+         "data":"<\/form>(.*)<\/div><div id=\"foot\">",
          "group":"1",
          "format": {
-            "<td>|<tr>|</td>": "",
+            "<td>|<tr>|</td>|<\/?table[^>]*>": "",
             "</tr>": "\r\n"
          }
       }
