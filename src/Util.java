@@ -1,7 +1,9 @@
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Whois Util
+ * JWhois Util
  *
  * @author Ryan
  * @create 2017-05-30 12:44
@@ -55,7 +57,37 @@ public class Util {
             ie.printStackTrace();
         }
     }
+    /**
+     * @author: Ryan
+     * @Description: Convert special characters to HTML entities
+     * @param: html
+     * @return: String
+     * @date: 17:17 2018/5/14
+     */
     public static String htmlSpecialChar(String html) {
-        return html.replaceAll("&gt;?","<").replaceAll("&nbsp;?"," ");
+        return html.replaceAll("&gt;?", "<").replaceAll("&nbsp;?", " ");
+    }
+    /**
+     * @author: Ryan
+     * @Description: Check if IPv4 avaliable
+     * @param: ip
+     * @return: boolean
+     * @date: 19:09 2018/5/14
+     */
+    public static boolean isIPv4(String ip) {
+        int count=0;
+        Pattern p = Pattern.compile("(^\\d{1,3})(\\.)(\\d{1,3})(\\.)(\\d{1,3})(\\.)(\\d{1,3}$)");
+        Matcher m = p.matcher(ip);
+        while(m.find()){
+            for(int i=1;i<8;i+=2){
+                if(Integer.parseInt(m.group(i)) <= 255 && Integer.parseInt(m.group(i)) >= 0){
+                    count++;
+                }
+            }
+        }
+        if(count==4)
+            return true;
+        else
+            return false;
     }
 }

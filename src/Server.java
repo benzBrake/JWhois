@@ -56,7 +56,9 @@ class SocketThread extends Thread {
             PrintWriter pw = new PrintWriter(sock.getOutputStream());
             String line = br.readLine();
             if (line !=null) {
-                pw.write(JWhois.whois(line));
+                JDomain d = new JDomain(line);
+                JResult r = JWhois.whois(d);
+                pw.write(r.toString());
                 pw.flush();
                 pw.close();
                 sock.close();
